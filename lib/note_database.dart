@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 //import 'package:sqflite_demo/note.dart';
@@ -10,6 +12,7 @@ class NoteModel {
   final String content;
   final bool isFavorite;
   final DateTime? createdTime;
+  Uint8List? image;
   NoteModel({
     this.id,
     this.number,
@@ -17,6 +20,7 @@ class NoteModel {
     required this.content,
     this.isFavorite = false,
     this.createdTime,
+    this.image
   });
 
    Map<String, Object?> toJson() => {
@@ -26,6 +30,7 @@ class NoteModel {
         NoteFields.content: content,
         NoteFields.isFavorite: isFavorite ? 1 : 0,
         NoteFields.createdTime: createdTime?.toIso8601String(),
+        NoteFields.image : image,
       };
 
       NoteModel copy({
@@ -35,6 +40,7 @@ class NoteModel {
     String? content,
     bool? isFavorite,
     DateTime? createdTime,
+    Uint8List? image,
   }) =>
       NoteModel(
         id: id ?? this.id,
@@ -43,6 +49,7 @@ class NoteModel {
         content: content ?? this.content,
         isFavorite: isFavorite ?? this.isFavorite,
         createdTime: createdTime ?? this.createdTime,
+        image: image??this.image,
       );
 
 
@@ -54,12 +61,12 @@ class NoteModel {
         isFavorite: json[NoteFields.isFavorite] == 1,
         createdTime:
             DateTime.tryParse(json[NoteFields.createdTime] as String? ?? ''),
+        image: json[NoteFields.image] as Uint8List?,
       );
 
 }
 
 class NoteFields {
-
   static const List<String> values = [
     id,
     number,
@@ -67,6 +74,7 @@ class NoteFields {
     content,
     isFavorite,
     createdTime,
+    image,
   ];
   
   static const String tableName = 'notes';
@@ -79,6 +87,8 @@ class NoteFields {
   static const String content = 'content';
   static const String isFavorite = 'is_favorite';
   static const String createdTime = 'created_time';
+  static const String image = 'image';
+  static const String blobtype = 'BLOB';
 }
  
 class NoteDatabase {
@@ -116,7 +126,8 @@ class NoteDatabase {
           ${NoteFields.title} ${NoteFields.textType},
           ${NoteFields.content} ${NoteFields.textType},
           ${NoteFields.isFavorite} ${NoteFields.intType},
-          ${NoteFields.createdTime} ${NoteFields.textType}
+          ${NoteFields.createdTime} ${NoteFields.textType},
+          ${NoteFields.image} ${NoteFields.blobtype}
         )
       ''');
   }

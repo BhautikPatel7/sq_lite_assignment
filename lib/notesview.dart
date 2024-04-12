@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 // import 'package:sqflite_demo/note.dart';
 import 'package:flutter_application_1/note_database.dart';
@@ -14,6 +16,8 @@ class _NotesViewState extends State<NotesView> {
   NoteDatabase noteDatabase = NoteDatabase.instance;
 
   List<NoteModel> notes = [];
+      static final Uint8List empty = Uint8List(0);
+  
 
   @override
   void initState() {
@@ -76,16 +80,25 @@ class _NotesViewState extends State<NotesView> {
                       child: Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                note.createdTime.toString().split(' ')[0],
-                              ),
-                              Text(
-                                note.title,
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
+                          child: Row(
+                            
+                            children: [
+                    note.image != null ? CircleAvatar(backgroundImage: MemoryImage(note.image ?? empty),) : Text(''),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      note.createdTime.toString().split(' ')[0],
+                                    ),
+                                    Text(
+                                      note.title,
+                                      style:
+                                          Theme.of(context).textTheme.headlineMedium,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
