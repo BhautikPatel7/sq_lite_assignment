@@ -88,7 +88,7 @@ class NoteFields {
   static const String isFavorite = 'is_favorite';
   static const String createdTime = 'created_time';
   static const String image = 'image';
-  static const String blobtype = 'BLOB';
+  static const String blobtype = 'BLOB';  
 }
  
 class NoteDatabase {
